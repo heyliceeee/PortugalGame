@@ -44,6 +44,17 @@ def write_district_name(x, y, district):
     text.penup() # put the pen down
     text.goto(x, y)
     text.write(district, align="center", font=("Arial", 10, "normal"))
+def create_failed_districts_csv(guessed):
+    """
+    csv file with districts that the user failed
+    :param guessed: districts that the user guessed
+    :return: csv file with districts that the user failed
+    """
+    guessed_names = [row["district"].values[0] for row in guessed]
+    districts_failed = dataset[~dataset["district"].isin(guessed_names)]
+
+    districts_failed.to_csv("districts_failed.csv", index=False)
+
 def game():
     """
     enter the district name until the user wins
@@ -65,8 +76,12 @@ def game():
             if total_districts == len(guessed_districts): # check if complete all districts
                 is_game_on = False # the game is over
 
+        if answer_district.lower() == "exit":
+            create_failed_districts_csv(guessed_districts) # generate csv with districts I failed
+            # show in a map
+            is_game_on = False
+
 setup_screen() # set up the screen
 # screen.onscreenclick(get_mouse_click_coor) # get mouse click coordinates
 dataset = get_data_from_csv()
 game() # enter the district name until the user wins
-screen.mainloop() # keep the screen running
