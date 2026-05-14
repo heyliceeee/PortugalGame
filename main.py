@@ -6,6 +6,7 @@ import pandas
 IMAGE = "/data/blank_portugal.gif"
 DATASET = "/data/districts.csv"
 dir_path = os.path.dirname(os.path.abspath(__file__)) # get the path of the current file
+
 screen = Screen()
 
 def setup_screen():
@@ -30,8 +31,14 @@ def get_data_from_csv():
     """
     file_path = dir_path + DATASET
     return pandas.read_csv(file_path)
+def game():
+    """
+    enter the district name until the user wins
+    """
+    answer_district = screen.textinput(title="Guess the District", prompt="What's another district's name?").title() # user answer
+    print(answer_district)
 
 setup_screen() # set up the screen
 # screen.onscreenclick(get_mouse_click_coor) # get mouse click coordinates
-print(get_data_from_csv())
+game() # enter the district name until the user wins
 screen.mainloop() # keep the screen running
